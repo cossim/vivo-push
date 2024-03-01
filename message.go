@@ -7,7 +7,7 @@ import (
 	gouuid "github.com/satori/go.uuid"
 )
 
-//单推
+// 单推
 type Message struct {
 	RegId           string            `json:"regId"`           // 订阅 PUSH 服务器得到的 id
 	NotifyType      int               `json:"notifyType"`      // 通知类型 1:无，2:响铃，3:振动，4:响铃和振动
@@ -20,6 +20,11 @@ type Message struct {
 	ClientCustomMap map[string]string `json:"clientCustomMap"` // 可选项。客户端自定义键值对自定义key和Value键值对个数不能超过 10 个，且长度不能超过1024 字符, key 和 Value 键值对总长度不能超过 1024 字符。
 	Extra           map[string]string `json:"extra"`           // 可选项。高级特性
 	RequestId       string            `json:"requestId"`       // 用户请求唯一标识
+	// PushMode 推送模式 0：正式推送；1：测试推送，不填默认为0
+	// （测试推送，只能给web界面录入的测试用户推送；审核中应用，只能用测试推送）
+	PushMode int `json:"pushMode,omitempty"`
+	// ForegroundShow 是否前台通知展示
+	ForegroundShow bool `json:"foregroundShow,omitempty"`
 }
 
 // 保存群推消息
@@ -35,7 +40,7 @@ type MessagePayload struct {
 	RequestId       string            `json:"requestId"`       // 用户请求唯一标识
 }
 
-//群推
+// 群推
 type MessageList struct {
 	RegIds    []string `json:"regIds"`    // regId 列表 个数大于等于 2，小于等于 1000， regId 长度 23 个字符(regIds，aliases 两者需 一个不为空，两个不为空，取 regIds)
 	TaskId    string   `json:"taskId"`    // 公共消息任务号，取 saveListPayload 返回的 taskId
@@ -74,7 +79,7 @@ func (m *MessagePayload) JSON() []byte {
 	return bytes
 }
 
-//-----------------------------------------------------------------------------------//
+// -----------------------------------------------------------------------------------//
 // 发送给设备的Message对象
 func NewVivoMessage(title, content string) *Message {
 	return &Message{
@@ -87,7 +92,7 @@ func NewVivoMessage(title, content string) *Message {
 		NetworkType:     -1,
 		ClientCustomMap: make(map[string]string),
 		Extra:           make(map[string]string),
-		RequestId:       strings.ToUpper(gouuid.Must(gouuid.NewV4()).String()),
+		RequestId:       strings.ToUpper(gouuid.NewV4().String()),
 	}
 }
 
@@ -102,7 +107,7 @@ func NewListPayloadMessage(title, content string) *MessagePayload {
 		SkipContent:     "",
 		NetworkType:     -1,
 		ClientCustomMap: make(map[string]string),
-		RequestId:       strings.ToUpper(gouuid.Must(gouuid.NewV4()).String()),
+		RequestId:       strings.ToUpper(gouuid.NewV4().String()),
 	}
 }
 
@@ -111,7 +116,7 @@ func NewListMessage(regIds []string, taskId string) *MessageList {
 	return &MessageList{
 		RegIds:    regIds,
 		TaskId:    taskId,
-		RequestId: strings.ToUpper(gouuid.Must(gouuid.NewV4()).String()),
+		RequestId: strings.ToUpper(gouuid.NewV4().String()),
 	}
 }
 
@@ -142,7 +147,7 @@ func (m *Message) SetJumpActivity(value string) *Message {
 	return m
 }
 
-//-----------------------------------------广播------------------------------------------//
+// -----------------------------------------广播------------------------------------------//
 // 设置通知类型
 func (m *MessagePayload) SetPayloadNotifyType(notifyType int) *MessagePayload {
 	m.NotifyType = notifyType
