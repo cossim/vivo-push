@@ -20,11 +20,18 @@ type Message struct {
 	ClientCustomMap map[string]string `json:"clientCustomMap"` // 可选项。客户端自定义键值对自定义key和Value键值对个数不能超过 10 个，且长度不能超过1024 字符, key 和 Value 键值对总长度不能超过 1024 字符。
 	Extra           map[string]string `json:"extra"`           // 可选项。高级特性
 	RequestId       string            `json:"requestId"`       // 用户请求唯一标识
+
+	// NotifyID 每条消息在通知栏的唯一标识 可以用于覆盖消息
+	NotifyID int `json:"notify_id"`
+
+	// Category 二级分类
+	Category string `json:"category"`
+
 	// PushMode 推送模式 0：正式推送；1：测试推送，不填默认为0
 	// （测试推送，只能给web界面录入的测试用户推送；审核中应用，只能用测试推送）
 	PushMode int `json:"pushMode,omitempty"`
 	// ForegroundShow 是否前台通知展示
-	ForegroundShow bool `json:"foregroundShow,omitempty"`
+	ForegroundShow bool `json:"foregroundShow"`
 }
 
 // 保存群推消息
