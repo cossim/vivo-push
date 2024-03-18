@@ -6,7 +6,6 @@ import (
 	"encoding/hex"
 	"encoding/json"
 	"errors"
-	"fmt"
 	"io/ioutil"
 	"net/http"
 	"net/url"
@@ -199,7 +198,6 @@ func (v *VivoPush) GetMessageStatusByJobKey(jobKey string) (*BatchStatusResult, 
 	if err != nil {
 		return nil, err
 	}
-	fmt.Println("res => ", string(res))
 	var result BatchStatusResult
 	err = json.Unmarshal(res, &result)
 	if err != nil {

@@ -10,7 +10,7 @@ const (
 	SaveListPayloadURL = "/message/saveListPayload" // 保存群推消息公共体接口
 	PushToListURL      = "/message/pushToList"      // 批量推送用户接口
 	PushToAllURL       = "/message/all"             // 全量发送接口
-	MessagesStatusURL  = "/report/getStatistics "   // 获取消息推送的统计值接口
+	MessagesStatusURL  = "/report/getStatistics"    // 获取消息推送的统计值接口
 )
 
 var (
