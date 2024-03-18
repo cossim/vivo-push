@@ -6,6 +6,7 @@ import (
 	"encoding/hex"
 	"encoding/json"
 	"errors"
+	"fmt"
 	"io/ioutil"
 	"net/http"
 	"net/url"
@@ -56,8 +57,8 @@ func NewClient(appId, appKey, appSecret string) (*VivoPush, error) {
 	}, nil
 }
 
-//----------------------------------------Token----------------------------------------//
-//获取token  返回的expiretime 秒  当过期的时候
+// ----------------------------------------Token----------------------------------------//
+// 获取token  返回的expiretime 秒  当过期的时候
 func (vc *VivoClient) GetToken() (string, error) {
 	now := time.Now().UnixNano() / 1e6
 	if authToken != nil {
@@ -105,7 +106,7 @@ func (vc *VivoClient) GetToken() (string, error) {
 	return token, nil
 }
 
-//----------------------------------------Sender----------------------------------------//
+// ----------------------------------------Sender----------------------------------------//
 // 根据regID，发送消息到指定设备上
 func (v *VivoPush) Send(msg *Message, regID string) (*SendResult, error) {
 	params := v.assembleSendParams(msg, regID)
@@ -190,7 +191,7 @@ func (v *VivoPush) SendAll(msg *MessagePayload) (*SendResult, error) {
 	return &result, nil
 }
 
-//----------------------------------------Tracer----------------------------------------//
+// ----------------------------------------Tracer----------------------------------------//
 // 获取指定消息的状态。
 func (v *VivoPush) GetMessageStatusByJobKey(jobKey string) (*BatchStatusResult, error) {
 	params := v.assembleStatusByJobKeyParams(jobKey)
@@ -198,6 +199,7 @@ func (v *VivoPush) GetMessageStatusByJobKey(jobKey string) (*BatchStatusResult, 
 	if err != nil {
 		return nil, err
 	}
+	fmt.Println("res => ", string(res))
 	var result BatchStatusResult
 	err = json.Unmarshal(res, &result)
 	if err != nil {
